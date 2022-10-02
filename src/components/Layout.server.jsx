@@ -1,4 +1,4 @@
-import { useShopQuery, CacheLong, gql, useUrl, Link } from '@shopify/hydrogen';
+import { useShopQuery, CacheLong, gql, useUrl, Link, Seo } from '@shopify/hydrogen';
 
 /**
  * A server component that defines a structure and organization of a page that can be used in different parts of the Hydrogen app
@@ -17,6 +17,14 @@ export function Layout({ children }) {
 
   return (
     <>
+      <Seo
+        type='defaultSeo'
+        data={{
+          title: shop.name,
+          description: shop.description
+        }}
+      />
+
       <div className='flex flex-col min-h-screen antialiased bg-neutral-50'>
         <div className=''>
           <a href='#mainContent' className='sr-only'>
