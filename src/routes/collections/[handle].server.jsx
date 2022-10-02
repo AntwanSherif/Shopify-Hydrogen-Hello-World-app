@@ -1,4 +1,5 @@
-import { gql, useShopQuery, useRouteParams } from '@shopify/hydrogen';
+import { Suspense } from 'react';
+import { gql, useShopQuery, useRouteParams, Seo } from '@shopify/hydrogen';
 import { Layout } from '../../components/Layout.server';
 
 export default function Collection() {
@@ -15,9 +16,21 @@ export default function Collection() {
 
   return (
     <Layout>
-      <section className='p-6 md:p-8 lg:p-12'>
-        This will be the collection page for <strong>{collection.title}</strong>
-      </section>
+      <Suspense>
+        <Seo type='collection' data={collection} />
+      </Suspense>
+
+      <header className='grid w-full gap-8 p-4 py-8 md:p-8 lg:p-12 justify-items-start'>
+        <h1 className='text-4xl whitespace-pre-wrap font-bold inline-block'>{collection.title}</h1>
+
+        {collection.description && (
+          <div className='flex items-baseline justify-between w-full'>
+            <div>
+              <p className='max-w-md whitespace-pre-wrap inherit text-copy inline-block'>{collection.description}</p>
+            </div>
+          </div>
+        )}
+      </header>
     </Layout>
   );
 }
@@ -25,7 +38,13 @@ export default function Collection() {
 const QUERY = gql`
   query CollectionDetails($handle: String!) {
     collection(handle: $handle) {
+      id
       title
+      description
+      seo {
+        description
+        title
+      }
     }
   }
 `;
