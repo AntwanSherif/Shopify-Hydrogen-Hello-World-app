@@ -1,18 +1,20 @@
-import React from 'react';
+import { Suspense } from 'react';
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
-import {Suspense} from 'react';
+import { Router, FileRoutes, ShopifyProvider, CartProvider } from '@shopify/hydrogen';
 
 function App() {
   return (
     <Suspense fallback={null}>
       <ShopifyProvider>
-        <Router>
-          <FileRoutes />
-        </Router>
+        <CartProvider>
+          <Router>
+            <FileRoutes />
+          </Router>
+        </CartProvider>
       </ShopifyProvider>
     </Suspense>
   );
 }
 
 export default renderHydrogen(App);
+
