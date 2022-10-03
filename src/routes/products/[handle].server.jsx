@@ -1,4 +1,12 @@
-import { useRouteParams, gql, useShopQuery } from '@shopify/hydrogen';
+import { Suspense } from 'react';
+import {
+  useRouteParams,
+  gql,
+  useShopQuery,
+  useServerAnalytics,
+  ShopifyAnalyticsConstants,
+  Seo
+} from '@shopify/hydrogen';
 import { Layout } from '../../components/Layout.server';
 
 export default function Product() {
@@ -13,8 +21,19 @@ export default function Product() {
     }
   });
 
+  useServerAnalytics({
+    shopify: {
+      pageType: ShopifyAnalyticsConstants.pageType.product,
+      resourceId: product.id
+    }
+  });
+
   return (
     <Layout>
+      <Suspense>
+        <Seo type='product' data={product} />
+      </Suspense>
+
       <section className='p-6 md:p-8 lg:p-12'>
         This will be the product page for <strong>{product.title}</strong>
       </section>
@@ -27,6 +46,10 @@ const PRODUCT_QUERY = gql`
     product(handle: $handle) {
       id
       title
+      seo {
+        title
+        description
+      }
     }
   }
 `;
