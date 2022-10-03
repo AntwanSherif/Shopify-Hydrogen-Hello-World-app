@@ -8,6 +8,7 @@ import {
   Seo
 } from '@shopify/hydrogen';
 import { Layout } from '../../components/Layout.server';
+import { ProductDetails } from '../../components/ProductDetails.client';
 
 export default function Product() {
   const { handle } = useRouteParams();
@@ -34,9 +35,7 @@ export default function Product() {
         <Seo type='product' data={product} />
       </Suspense>
 
-      <section className='p-6 md:p-8 lg:p-12'>
-        This will be the product page for <strong>{product.title}</strong>
-      </section>
+      <ProductDetails product={product} />
     </Layout>
   );
 }
@@ -46,6 +45,8 @@ const PRODUCT_QUERY = gql`
     product(handle: $handle) {
       id
       title
+      vendor
+      descriptionHtml
       seo {
         title
         description
